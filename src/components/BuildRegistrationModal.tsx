@@ -64,6 +64,15 @@ export const BuildRegistrationModal: React.FC<BuildRegistrationModalProps> = ({
   const [defenseTotal, setDefenseTotal] = useState<number>(initialBuild?.defenseTotal || 1050);
   const [sharpness, setSharpness] = useState<HunterBuild['sharpness']>(initialBuild?.sharpness || 'Purple');
   
+  // Wilds Secondary Weapon State
+  const [secondaryWeaponType, setSecondaryWeaponType] = useState<WeaponType>(initialBuild?.secondaryWeapon?.weaponType || 'bow');
+  const [secondaryWeaponName, setSecondaryWeaponName] = useState(initialBuild?.secondaryWeapon?.weaponName || 'Rey Dau Fulgurbow');
+  const [secondaryElement, setSecondaryElement] = useState<ElementType>(initialBuild?.secondaryWeapon?.element || 'Thunder');
+  const [secondaryElementValue, setSecondaryElementValue] = useState<number>(initialBuild?.secondaryWeapon?.elementValue || 380);
+  const [secondaryAttackRaw, setSecondaryAttackRaw] = useState<number>(initialBuild?.secondaryWeapon?.attackRaw || 1280);
+  const [secondaryAffinity, setSecondaryAffinity] = useState<number>(initialBuild?.secondaryWeapon?.affinity || 30);
+  const [secondarySharpness, setSecondarySharpness] = useState<HunterBuild['sharpness']>(initialBuild?.secondaryWeapon?.sharpness || 'Purple');
+
   const [huntingStyle, setHuntingStyle] = useState<HuntingStyle>(initialBuild?.huntingStyle || 'Focus Mode & Seikret');
   const [playstyleCategory, setPlaystyleCategory] = useState<HunterBuild['playstyleCategory']>(initialBuild?.playstyleCategory || 'Meta Raw');
   const [switchSkillsText, setSwitchSkillsText] = useState<string>(initialBuild?.switchSkillsOrArts?.join(', ') || 'Focus Wound Slash, True Charged Slash III');
@@ -268,6 +277,17 @@ export const BuildRegistrationModal: React.FC<BuildRegistrationModalProps> = ({
       affinity: Number(affinity) || 50,
       defenseTotal: Number(defenseTotal) || 900,
       sharpness: sharpness || 'Purple',
+      secondaryWeapon: game === 'wilds' ? {
+        weaponType: secondaryWeaponType,
+        weaponName: secondaryWeaponName.trim() || 'Secondary Weapon',
+        weaponImage: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1000&q=80',
+        element: secondaryElement,
+        elementValue: Number(secondaryElementValue) || 0,
+        attackRaw: Number(secondaryAttackRaw) || 1100,
+        affinity: Number(secondaryAffinity) || 20,
+        sharpness: secondarySharpness || 'Purple',
+        defenseBonus: 0,
+      } : undefined,
       huntingStyle,
       switchSkillsOrArts: switchSkillsText.split(',').map(s => s.trim()).filter(Boolean),
       playstyleCategory,
@@ -550,6 +570,96 @@ export const BuildRegistrationModal: React.FC<BuildRegistrationModalProps> = ({
                   </select>
                 </div>
               </div>
+
+              {/* Wilds Secondary Weapon Configuration */}
+              {game === 'wilds' && (
+                <div className="p-4 rounded-2xl bg-amber-950/20 border border-amber-500/40 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="px-2 py-0.5 rounded bg-sky-500 text-slate-950 text-[10px] font-black uppercase font-mono">
+                        Seikret Holster
+                      </span>
+                      <h4 className="text-xs font-bold text-amber-300">
+                        Monster Hunter Wilds Secondary Weapon
+                      </h4>
+                    </div>
+                    <span className="text-[11px] text-amber-400/80 font-mono">Slot 2</span>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="text-[11px] text-slate-400 font-medium mb-1 block">Secondary Weapon Name</label>
+                      <input
+                        type="text"
+                        value={secondaryWeaponName}
+                        onChange={(e) => setSecondaryWeaponName(e.target.value)}
+                        placeholder="e.g. Rey Dau Fulgurbow"
+                        className="w-full px-3 py-1.5 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-[11px] text-slate-400 font-medium mb-1 block">Secondary Weapon Type</label>
+                      <select
+                        value={secondaryWeaponType}
+                        onChange={(e) => setSecondaryWeaponType(e.target.value as WeaponType)}
+                        className="w-full px-3 py-1.5 bg-slate-950 border border-slate-700 rounded-xl text-xs text-white"
+                      >
+                        {(Object.keys(WEAPONS_DATA) as WeaponType[]).map((wKey) => (
+                          <option key={wKey} value={wKey}>
+                            {WEAPONS_DATA[wKey].name} ({WEAPONS_DATA[wKey].category})
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-mono">
+                    <div>
+                      <label className="text-[10px] text-slate-400 block mb-1">Secondary Raw</label>
+                      <input
+                        type="number"
+                        value={secondaryAttackRaw}
+                        onChange={(e) => setSecondaryAttackRaw(Number(e.target.value))}
+                        className="w-full px-2 py-1 bg-slate-950 border border-slate-700 rounded-lg text-white text-xs"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-[10px] text-slate-400 block mb-1">Affinity %</label>
+                      <input
+                        type="number"
+                        value={secondaryAffinity}
+                        onChange={(e) => setSecondaryAffinity(Number(e.target.value))}
+                        className="w-full px-2 py-1 bg-slate-950 border border-slate-700 rounded-lg text-amber-400 text-xs"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-[10px] text-slate-400 block mb-1">Element</label>
+                      <select
+                        value={secondaryElement}
+                        onChange={(e) => setSecondaryElement(e.target.value as ElementType)}
+                        className="w-full px-2 py-1 bg-slate-950 border border-slate-700 rounded-lg text-white text-xs"
+                      >
+                        {['None', 'Fire', 'Water', 'Thunder', 'Ice', 'Dragon', 'Blast', 'Poison', 'Paralysis', 'Sleep'].map(el => (
+                          <option key={el} value={el}>{el}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div>
+                      <label className="text-[10px] text-slate-400 block mb-1">Sharpness</label>
+                      <select
+                        value={secondarySharpness}
+                        onChange={(e) => setSecondarySharpness(e.target.value as any)}
+                        className="w-full px-2 py-1 bg-slate-950 border border-slate-700 rounded-lg text-purple-300 text-xs font-bold"
+                      >
+                        <option value="Purple">Purple</option>
+                        <option value="White">White</option>
+                        <option value="Blue">Blue</option>
+                        <option value="Green">Green</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 

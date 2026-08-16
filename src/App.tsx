@@ -48,6 +48,8 @@ import { MonstersPage } from './components/MonstersPage';
 import { GearInfoPage } from './components/GearInfoPage';
 import { GameSelectorCarousel } from './components/GameSelectorCarousel';
 import { GameHubSearch } from './components/GameHubSearch';
+import { ArtianWeaponTrackerModal } from './components/ArtianWeaponTrackerModal';
+import { ArtianRollEntry } from './types';
 
 const CURRENT_USER_STORAGE_KEY = 'mh_current_user_profile_v1';
 
@@ -120,6 +122,7 @@ export default function App() {
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
   const [isFashionSpotlightOpen, setIsFashionSpotlightOpen] = useState(false);
   const [isGuildGuideOpen, setIsGuildGuideOpen] = useState(false);
+  const [isArtianTrackerOpen, setIsArtianTrackerOpen] = useState(false);
   const [initialFashionBuildId, setInitialFashionBuildId] = useState<string | undefined>(undefined);
   const [builderTemplate, setBuilderTemplate] = useState<HunterBuild | null>(null);
 
@@ -264,7 +267,7 @@ export default function App() {
       <Navbar
         currentUser={currentUser}
         currentPage={currentPage}
-        onNavigate={(page: AppPageView) => {
+        onNavigate={(page) => {
           setCurrentPage(page);
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }}
@@ -309,7 +312,7 @@ export default function App() {
           <MonstersPage
             initialGame={selectedGame}
             initialMonsterName={focusedMonster}
-            onNavigateToWorkshopWithMonster={(monsterName: string) => {
+            onNavigateToWorkshopWithMonster={(monsterName) => {
               handleLaunchWorkshop(selectedGame, monsterName);
             }}
           />
@@ -320,7 +323,7 @@ export default function App() {
           <GearInfoPage
             initialGame={selectedGame}
             initialTab={focusedGearTab}
-            onNavigateToWorkshop={(gearName: string) => {
+            onNavigateToWorkshop={(gearName) => {
               handleLaunchWorkshop(selectedGame, gearName);
             }}
           />
@@ -332,23 +335,25 @@ export default function App() {
             {/* 1. Game Selection Carousel */}
             <GameSelectorCarousel
               selectedGame={selectedGame}
-              onSelectGame={(game: GameTitle) => {
+              onSelectGame={(game) => {
                 setSelectedGame(game);
-                setFilters((prev: FilterState) => ({ ...prev, game: 'all' }));
+                setFilters((prev) => ({ ...prev, game: 'all' }));
               }}
-              onLaunchWorkshop={(game: GameTitle) => handleLaunchWorkshop(game)}
-              onLaunchMonsters={(game: GameTitle) => handleLaunchMonsters(game)}
-              onLaunchGearInfo={(game: GameTitle) => handleLaunchGearInfo(game)}
+              onLaunchWorkshop={(game) => handleLaunchWorkshop(game)}
+              onLaunchMonsters={(game) => handleLaunchMonsters(game)}
+              onLaunchGearInfo={(game) => handleLaunchGearInfo(game)}
+              onOpenArtianTracker={() => setIsArtianTrackerOpen(true)}
             />
 
             {/* 2. Game-Specific Search & Exploration Hub */}
             <GameHubSearch
               selectedGame={selectedGame}
-              onNavigateToWorkshop={(gear: string) => handleLaunchWorkshop(selectedGame, gear)}
-              onNavigateToMonsters={(monster: string) => handleLaunchMonsters(selectedGame, monster)}
-              onNavigateToGearInfo={(tab: 'weapons' | 'armor' | 'skills') => handleLaunchGearInfo(selectedGame, tab)}
-              onSelectBuild={(build: HunterBuild) => setSelectedBuild(build)}
+              onNavigateToWorkshop={(gear) => handleLaunchWorkshop(selectedGame, gear)}
+              onNavigateToMonsters={(monster) => handleLaunchMonsters(selectedGame, monster)}
+              onNavigateToGearInfo={(tab) => handleLaunchGearInfo(selectedGame, tab)}
+              onSelectBuild={(build) => setSelectedBuild(build)}
               allBuilds={builds}
+              onOpenArtianTracker={() => setIsArtianTrackerOpen(true)}
             />
 
             {/* 3. Clean Curated Community Builds Showcase */}
@@ -508,6 +513,16 @@ export default function App() {
       <GuildGuideModal
         isOpen={isGuildGuideOpen}
         onClose={() => setIsGuildGuideOpen(false)}
+      />
+
+      {/* Artian Weapon Random Tracker Modal (Monster Hunter Wilds Endgame Tool) */}
+      <ArtianWeaponTrackerModal
+        isOpen={isArtianTrackerOpen}
+        onClose={() => setIsArtianTrackerOpen(false)}
+        onEquipToWorkshop={(artianRoll) => {
+          setIsArtianTrackerOpen(false);
+          handleLaunchWorkshop('wilds', artianRoll.weaponCustomName);
+        }}
       />
     </div>
   );

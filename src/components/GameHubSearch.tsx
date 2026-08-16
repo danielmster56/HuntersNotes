@@ -16,7 +16,8 @@ import {
   X,
   Target,
   ChevronRight,
-  BookOpen
+  BookOpen,
+  Dices
 } from 'lucide-react';
 import { 
   GameTitle, 
@@ -45,6 +46,7 @@ interface GameHubSearchProps {
   onNavigateToGearInfo: (tab?: 'weapons' | 'armor' | 'skills') => void;
   onSelectBuild: (build: HunterBuild) => void;
   allBuilds: HunterBuild[];
+  onOpenArtianTracker?: () => void;
 }
 
 export const GameHubSearch: React.FC<GameHubSearchProps> = ({
@@ -54,6 +56,7 @@ export const GameHubSearch: React.FC<GameHubSearchProps> = ({
   onNavigateToGearInfo,
   onSelectBuild,
   allBuilds,
+  onOpenArtianTracker,
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchCategory, setSearchCategory] = useState<'all' | 'monsters' | 'weapons' | 'armor' | 'skills' | 'builds'>('all');
@@ -184,6 +187,18 @@ export const GameHubSearch: React.FC<GameHubSearchProps> = ({
                 Quickly locate weapon trees, armor skills, monster weaknesses, carve rates, or community loadouts for {currentGame.name}.
               </p>
             </div>
+
+            {selectedGame === 'wilds' && (
+              <button
+                id="btn-search-header-artian-tracker"
+                onClick={() => onOpenArtianTracker?.()}
+                className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500/20 to-amber-600/20 hover:from-amber-500/30 hover:to-amber-600/30 border border-amber-500/50 text-amber-300 text-xs font-bold transition-all shadow-md shrink-0"
+              >
+                <Dices className="w-4 h-4 text-amber-400" />
+                <span>Artian Weapon random tracker</span>
+                <ChevronRight className="w-3.5 h-3.5 text-amber-400" />
+              </button>
+            )}
           </div>
 
           {/* Omni-Search Input Box */}

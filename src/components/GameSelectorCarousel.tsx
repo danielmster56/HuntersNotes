@@ -12,7 +12,9 @@ import {
   Compass,
   MapPin,
   Flame,
-  Zap
+  Zap,
+  Dices,
+  ExternalLink
 } from 'lucide-react';
 import { GameTitle } from '../types';
 import { GAMES_DATA, GameInfo } from '../data/monsterHunterData';
@@ -23,6 +25,7 @@ interface GameSelectorCarouselProps {
   onLaunchWorkshop: (game: GameTitle) => void;
   onLaunchMonsters: (game: GameTitle) => void;
   onLaunchGearInfo: (game: GameTitle) => void;
+  onOpenArtianTracker?: () => void;
 }
 
 const GAME_KEYS: GameTitle[] = ['wilds', 'sunbreak', 'iceborne', 'mhgu', 'mh4u'];
@@ -33,6 +36,7 @@ export const GameSelectorCarousel: React.FC<GameSelectorCarouselProps> = ({
   onLaunchWorkshop,
   onLaunchMonsters,
   onLaunchGearInfo,
+  onOpenArtianTracker,
 }) => {
   const [activeIndex, setActiveIndex] = useState(() => {
     const idx = GAME_KEYS.indexOf(selectedGame);
@@ -160,27 +164,70 @@ export const GameSelectorCarousel: React.FC<GameSelectorCarouselProps> = ({
               </div>
             </div>
 
-            {/* Center Content: Game Title, Lore & Signature Mechanics */}
-            <div className="relative z-10 my-6 max-w-3xl space-y-3">
-              <div className="text-xs sm:text-sm font-bold text-amber-400 uppercase tracking-wider font-mono flex items-center gap-2">
-                <span>Featured Monster: {currentGame.coverMonster}</span>
-              </div>
+            {/* Center Content: Game Title, Lore, Mechanics & Right-Side Tool Link */}
+            <div className="relative z-10 my-6 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+              <div className="max-w-2xl space-y-3">
+                <div className="text-xs sm:text-sm font-bold text-amber-400 uppercase tracking-wider font-mono flex items-center gap-2">
+                  <span>Featured Monster: {currentGame.coverMonster}</span>
+                </div>
 
-              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight drop-shadow-md">
-                {currentGame.name}
-              </h1>
+                <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight drop-shadow-md">
+                  {currentGame.name}
+                </h1>
 
-              <p className="text-sm sm:text-base text-slate-200 leading-relaxed drop-shadow max-w-2xl">
-                {currentGame.tagline}
-              </p>
+                <p className="text-sm sm:text-base text-slate-200 leading-relaxed drop-shadow max-w-2xl">
+                  {currentGame.tagline}
+                </p>
 
-              {/* Signature Mechanics Pill Strip */}
-              <div className="pt-2 flex flex-wrap items-center gap-2">
-                <div className="px-3 py-1.5 rounded-xl bg-slate-900/90 border border-amber-500/30 text-xs text-amber-200 font-semibold flex items-center gap-2 shadow-lg backdrop-blur-md">
-                  <Zap className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-                  <span>{currentGame.signatureMechanic}</span>
+                {/* Signature Mechanics Pill Strip */}
+                <div className="pt-2 flex flex-wrap items-center gap-2">
+                  <div className="px-3 py-1.5 rounded-xl bg-slate-900/90 border border-amber-500/30 text-xs text-amber-200 font-semibold flex items-center gap-2 shadow-lg backdrop-blur-md">
+                    <Zap className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                    <span>{currentGame.signatureMechanic}</span>
+                  </div>
                 </div>
               </div>
+
+              {/* Right-Side Tool Preview Card: Artian Weapon random tracker (Exclusive for Monster Hunter Wilds) */}
+              {activeGameKey === 'wilds' && (
+                <div 
+                  id="wilds-artian-tool-card"
+                  className="w-full lg:w-80 bg-slate-950/95 border-2 border-amber-500/50 hover:border-amber-400 rounded-3xl p-4 shadow-2xl backdrop-blur-xl space-y-3 shrink-0 transition-all group"
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[10px] font-mono font-bold uppercase border border-amber-500/40 flex items-center gap-1.5 shadow-sm">
+                      <Dices className="w-3.5 h-3.5 text-amber-400 animate-spin-slow" />
+                      <span>Wilds Tool</span>
+                    </span>
+                    <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/30 font-bold">
+                      Endgame RNG
+                    </span>
+                  </div>
+
+                  <div>
+                    <h3 className="text-base font-black text-white group-hover:text-amber-300 transition-colors flex items-center gap-1.5">
+                      <span>Artian Weapon random tracker</span>
+                    </h3>
+                    <p className="text-xs text-slate-300 mt-1 leading-relaxed">
+                      Choose your weapon type with icons and register your max-upgrade randomizer rolls & awakenings.
+                    </p>
+                  </div>
+
+                  <button
+                    id="btn-open-artian-random-tracker"
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onOpenArtianTracker?.();
+                    }}
+                    className="w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs shadow-lg shadow-amber-500/25 flex items-center justify-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98]"
+                  >
+                    <Dices className="w-4 h-4 text-slate-950" />
+                    <span>Open Artian Random Tracker</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              )}
             </div>
 
             {/* Bottom Actions Row & Quick Launch Portals */}

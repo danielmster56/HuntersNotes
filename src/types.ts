@@ -113,6 +113,22 @@ export interface HunterBuild {
   defenseTotal: number;
   sharpness?: 'Red' | 'Orange' | 'Yellow' | 'Green' | 'Blue' | 'White' | 'Purple';
   
+  // Monster Hunter Wilds Exclusive: Seikret Mount Secondary Weapon Holster
+  secondaryWeapon?: {
+    weaponType: WeaponType;
+    weaponName: string;
+    weaponImage?: string;
+    element: ElementType;
+    elementValue?: number;
+    attackRaw: number;
+    affinity: number;
+    sharpness?: 'Red' | 'Orange' | 'Yellow' | 'Green' | 'Blue' | 'White' | 'Purple';
+    defenseBonus?: number;
+    slots?: number[];
+    decorations?: string[];
+    specialTrait?: string;
+  };
+  
   huntingStyle: HuntingStyle;
   switchSkillsOrArts?: string[];
   playstyleCategory: 'Meta Raw' | 'Elemental' | 'Comfort / Tank' | 'Support' | 'Speedrun' | 'Fashion First' | 'Niche Meme';
@@ -212,3 +228,28 @@ export interface SkillDatabaseEntry {
   levelEffects: string[];
   foundOnMonsters: string[];
 }
+
+export interface ArtianRollEntry {
+  id: string;
+  weaponType: WeaponType;
+  weaponCustomName: string;
+  maxUpgradeLevel: number;
+  baseAttackRaw: number;
+  bonusAttackRoll: number;
+  finalAttackRaw: number;
+  baseAffinity: number;
+  bonusAffinityRoll: number;
+  finalAffinity: number;
+  elementType: ElementType;
+  elementRollValue: number;
+  sharpnessTier: 'Green' | 'Blue' | 'White' | 'Purple';
+  sharpnessGaugeRoll: string;
+  decorationSlotsRoll: number[];
+  defenseBonusRoll: number;
+  ancientAwakeningPerk: string;
+  qualityGrade: 'God Roll ★★★★★' | 'Meta Tier ★★★★' | 'Great Roll ★★★' | 'Average ★★' | 'Reroll Needed ★';
+  recordedAt: string;
+  hunterNotes: string;
+  isFavorite?: boolean;
+}
+

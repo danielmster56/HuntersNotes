@@ -271,6 +271,46 @@ export const BuildModal: React.FC<BuildModalProps> = ({
                   </div>
                 </div>
 
+                {/* Monster Hunter Wilds Seikret Secondary Weapon Showcase */}
+                {build.secondaryWeapon && (
+                  <div className="p-4 rounded-2xl bg-amber-950/20 border border-amber-500/40 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span className="px-2.5 py-0.5 rounded-full bg-sky-500 text-slate-950 text-[10px] font-mono font-black uppercase">
+                          MH Wilds Seikret Mount Holster Weapon
+                        </span>
+                        <h4 className="text-sm font-bold text-amber-200">
+                          {build.secondaryWeapon.weaponName}
+                        </h4>
+                      </div>
+                      <span className="text-xs text-amber-400 font-mono">
+                        {WEAPONS_DATA[build.secondaryWeapon.weaponType]?.name || build.secondaryWeapon.weaponType}
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs font-mono">
+                      <div className="p-2 rounded-xl bg-slate-950/80 border border-slate-800">
+                        <div className="text-[10px] text-slate-400">Secondary Raw</div>
+                        <div className="text-sm font-bold text-white">{build.secondaryWeapon.attackRaw}</div>
+                      </div>
+                      <div className="p-2 rounded-xl bg-slate-950/80 border border-slate-800">
+                        <div className="text-[10px] text-slate-400">Affinity</div>
+                        <div className="text-sm font-bold text-amber-400">{build.secondaryWeapon.affinity}%</div>
+                      </div>
+                      <div className="p-2 rounded-xl bg-slate-950/80 border border-slate-800">
+                        <div className="text-[10px] text-slate-400">Element</div>
+                        <div className="text-sm font-bold text-sky-300">
+                          {build.secondaryWeapon.element} ({build.secondaryWeapon.elementValue || 0})
+                        </div>
+                      </div>
+                      <div className="p-2 rounded-xl bg-slate-950/80 border border-slate-800">
+                        <div className="text-[10px] text-slate-400">Sharpness</div>
+                        <div className="text-sm font-bold text-purple-300">{build.secondaryWeapon.sharpness || 'Purple'}</div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 {/* Quick Skills & Description */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="p-5 rounded-2xl bg-slate-950/80 border border-slate-800 space-y-3">
@@ -323,12 +363,70 @@ export const BuildModal: React.FC<BuildModalProps> = ({
                 </div>
 
                 <div className="space-y-3">
+                  {/* Primary Weapon */}
+                  <div className="p-4 rounded-2xl bg-slate-950/80 border border-slate-800 hover:border-slate-700 transition-all flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div className="flex items-start gap-3">
+                      <div className="p-2.5 rounded-xl bg-amber-500/20 border border-amber-500/40 text-amber-300 shrink-0">
+                        <Sword className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <div className="text-xs uppercase tracking-wider font-mono text-amber-400">Primary Weapon</div>
+                        <h4 className="text-base font-bold text-slate-100">{build.weaponName}</h4>
+                        <div className="text-xs text-slate-400 mt-0.5">
+                          Type: <strong className="text-slate-300">{WEAPONS_DATA[build.weaponType]?.name || build.weaponType}</strong> · Raw: <strong className="text-slate-200">{build.attackRaw}</strong> · Affinity: <strong className="text-amber-400">{build.affinity}%</strong>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-3 bg-slate-900/80 p-3 rounded-xl border border-slate-800 text-xs font-mono">
+                      <div>
+                        <span className="text-slate-400">Element:</span>{' '}
+                        <span className="text-amber-300 font-bold">{build.element} ({build.elementValue || 0})</span>
+                      </div>
+                      <div>
+                        <span className="text-slate-400">Sharpness:</span>{' '}
+                        <span className="text-purple-300 font-bold">{build.sharpness || 'Purple'}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Secondary Seikret Holster Weapon (Wilds) */}
+                  {build.secondaryWeapon && (
+                    <div className="p-4 rounded-2xl bg-sky-950/20 border border-sky-500/40 hover:border-sky-400 transition-all flex flex-col md:flex-row md:items-center justify-between gap-4">
+                      <div className="flex items-start gap-3">
+                        <div className="p-2.5 rounded-xl bg-sky-500/20 border border-sky-500/50 text-sky-300 shrink-0">
+                          <Sword className="w-5 h-5" />
+                        </div>
+                        <div>
+                          <div className="text-xs uppercase tracking-wider font-mono text-sky-400 flex items-center gap-1.5">
+                            <span>Secondary Holster Weapon (MH Wilds)</span>
+                          </div>
+                          <h4 className="text-base font-bold text-sky-100">{build.secondaryWeapon.weaponName}</h4>
+                          <div className="text-xs text-slate-400 mt-0.5">
+                            Type: <strong className="text-slate-300">{WEAPONS_DATA[build.secondaryWeapon.weaponType]?.name || build.secondaryWeapon.weaponType}</strong> · Raw: <strong className="text-slate-200">{build.secondaryWeapon.attackRaw}</strong> · Affinity: <strong className="text-sky-300">{build.secondaryWeapon.affinity}%</strong>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-3 bg-slate-900/80 p-3 rounded-xl border border-slate-800 text-xs font-mono">
+                        <div>
+                          <span className="text-slate-400">Element:</span>{' '}
+                          <span className="text-sky-300 font-bold">{build.secondaryWeapon.element} ({build.secondaryWeapon.elementValue || 0})</span>
+                        </div>
+                        <div>
+                          <span className="text-slate-400">Sharpness:</span>{' '}
+                          <span className="text-purple-300 font-bold">{build.secondaryWeapon.sharpness || 'Purple'}</span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
                   {[
-                    { slotLabel: 'Head Armor', piece: build.head },
-                    { slotLabel: 'Chest Armor', piece: build.chest },
-                    { slotLabel: 'Arm Vambraces', piece: build.arms },
-                    { slotLabel: 'Waist Coil', piece: build.waist },
-                    { slotLabel: 'Leg Greaves', piece: build.legs },
+                    { slotLabel: 'Head Armor (1/5)', piece: build.head },
+                    { slotLabel: 'Chest Armor (2/5)', piece: build.chest },
+                    { slotLabel: 'Arm Vambraces (3/5)', piece: build.arms },
+                    { slotLabel: 'Waist Coil (4/5)', piece: build.waist },
+                    { slotLabel: 'Leg Greaves (5/5)', piece: build.legs },
                   ].map(({ slotLabel, piece }) => (
                     <div key={slotLabel} className="p-4 rounded-2xl bg-slate-950/80 border border-slate-800 hover:border-slate-700 transition-all flex flex-col md:flex-row md:items-center justify-between gap-4">
                       <div className="flex items-start gap-3">
