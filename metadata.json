@@ -1,0 +1,6 @@
+{
+  "name": "Monster Hunter Build & Fashion Hub",
+  "description": "Register, explore, and showcase Monster Hunter builds and fashion sets across game styles with armor skill and weapon search filters and interactive high-resolution gear carousels.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
